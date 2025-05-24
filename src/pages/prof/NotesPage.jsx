@@ -370,7 +370,7 @@ const MeetingPage = () => {
         meetingId: meeting._id,
         isInstant: meeting.isInstant,
         startTime: meeting.startTime,
-        serverTime: new Date(),
+        serverTime: new Date().toISOString(),
         clientTime: new Date().toISOString(),
         timezoneOffset: new Date().getTimezoneOffset()
       });
@@ -381,7 +381,7 @@ const MeetingPage = () => {
         const timeDiff = (meetingTime - now) / (1000 * 60);
         
         if (timeDiff > 15) {
-          toast.warning(`Cette réunion n'est pas encore disponible. Elle sera accessible 15 minutes avant l'heure prévue (${formatTime(meeting.startTime)}).`, {
+          toast.warning(`Cette réunion n'est pas encore disponible. Elle sera accessible 15 minutes avant l'heure prévue (${formatDateTime(meeting.startTime)}).`, {
             containerId: "devoirs-toast"
     
           });
@@ -463,25 +463,40 @@ const MeetingPage = () => {
   // Vérifier si une réunion est prochainement disponible
   const isMeetingSoonAvailable = (meeting) => {
     const now = new Date();
-
     const startTime = new Date(meeting.startTime);
-  
     const timeDiffMinutes = (startTime - now) / (1000 * 60);
     return timeDiffMinutes <= 15 && timeDiffMinutes > 0;
   };
 
-  // Format date to display
+  // Fonction unifiée pour formater les dates avec fuseau UTC
+  const formatDateTime = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleString("fr-FR", {
+      timeZone: 'UTC', // Désactive l'ajustement automatique du fuseau
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  // Format date only to display (pour compatibilité avec les composants existants)
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("fr-FR", {
+    const date = new Date(dateString);
+    return date.toLocaleString("fr-FR", {
+      timeZone: 'UTC',
       weekday: "long",
       day: "numeric",
       month: "long",
     });
   };
 
-  // Format time to display
+  // Format time only to display (pour compatibilité avec les composants existants)
   const formatTime = (dateString) => {
-    return new Date(dateString).toLocaleTimeString("fr-FR", {
+    const date = new Date(dateString);
+    return date.toLocaleString("fr-FR", {
+      timeZone: 'UTC',
       hour: "2-digit",
       minute: "2-digit",
     });
@@ -550,6 +565,7 @@ const MeetingPage = () => {
                   isMeetingSoonAvailable={isMeetingSoonAvailable}
                   formatDate={formatDate}
                   formatTime={formatTime}
+                  formatDateTime={formatDateTime}
                 />
               ) : (
                 <EmptyState
@@ -598,6 +614,7 @@ const MeetingPage = () => {
                   isPast={true}
                   formatDate={formatDate}
                   formatTime={formatTime}
+                  formatDateTime={formatDateTime}
                 />
               ) : (
                 <EmptyState
@@ -648,6 +665,7 @@ const MeetingPage = () => {
           isOperationLoading={isOperationLoading}
           formatDate={formatDate}
           formatTime={formatTime}
+          formatDateTime={formatDateTime}
         />
       </div>
      
