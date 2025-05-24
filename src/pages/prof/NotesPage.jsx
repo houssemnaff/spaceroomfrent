@@ -455,7 +455,7 @@ const MeetingPage = () => {
   // Vérifier si une réunion est en direct maintenant (version corrigée)
 const isMeetingLive = (meeting) => {
   const now = new Date();
-  const startTime = new Date(meeting.startTime);
+  const startTime = meeting.startTime;
     console.log("startttttt time live ",startTime);
 
   const endTime = new Date(startTime.getTime() + meeting.duration * 60000);
@@ -467,7 +467,7 @@ const isMeetingLive = (meeting) => {
 // Vérifier si une réunion est prochainement disponible (version corrigée)
 const isMeetingSoonAvailable = (meeting) => {
   const now = new Date();
-  const startTime = new Date(meeting.startTime);
+  const startTime = meeting.startTime;
   console.log("startttttt time ",startTime);
   // Calcul en millisecondes UTC
   const timeDiffMinutes = (startTime.getTime() - now.getTime()) / (1000 * 60);
