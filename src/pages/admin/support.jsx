@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +11,7 @@ import { toast } from "react-toastify";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Mail, MessageSquare, Clock, CheckCircle, XCircle, AlertCircle, Loader2, Plus, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 //
 const SupportPage = () => {
   const { token } = useAuth();
@@ -464,7 +464,7 @@ const SupportPage = () => {
             </div>
             <div>
               <label className="text-sm font-medium">Réponse</label>
-              <Textarea
+              <Input
                 value={response}
                 onChange={(e) => setResponse(e.target.value)}
                 placeholder="Écrivez votre réponse..."
