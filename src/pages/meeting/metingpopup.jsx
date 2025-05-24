@@ -280,7 +280,7 @@ export const EditMeetingDialog = ({
         setIsOpen(false);
         resetForm();
     };
-   // console.log("edite ",meetingForm);
+    console.log("edite ",meetingForm);
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
