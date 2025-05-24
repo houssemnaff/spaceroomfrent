@@ -21,16 +21,17 @@ const MeetingListItem = ({
   
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const formatDateTime = (isoString) => {
-    //const date = new Date(isoString);
-    return date.toLocaleString("fr-FR", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+ const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  return date.toLocaleString("fr-FR", {
+    timeZone: 'UTC', // Désactive l'ajustement automatique du fuseau
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
   
   const handleEdit = () => {
     setIsDropdownOpen(false);
