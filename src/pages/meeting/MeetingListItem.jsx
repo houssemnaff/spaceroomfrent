@@ -22,7 +22,7 @@ const MeetingListItem = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const formatDateTime = (isoString) => {
-    const date = new Date(isoString);
+    //const date = new Date(isoString);
     return date.toLocaleString("fr-FR", {
       day: "2-digit",
       month: "long",
@@ -58,7 +58,7 @@ const MeetingListItem = ({
               </div>
             </div>
             <div className="text-xs sm:text-sm text-gray-500 mt-1">
-              {meeting.startTime} 
+              {formatDateTime(meeting.startTime)} 
             </div>
             {meeting.description && (
               <p className="text-xs sm:text-sm text-gray-600 mt-2 line-clamp-2">{meeting.description}</p>
