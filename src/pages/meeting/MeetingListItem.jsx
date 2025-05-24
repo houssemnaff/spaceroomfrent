@@ -58,7 +58,7 @@ const MeetingListItem = ({
               </div>
             </div>
             <div className="text-xs sm:text-sm text-gray-500 mt-1">
-              {formatDateTime(meeting.startTime)} 
+              {meeting.startTime} 
             </div>
             {meeting.description && (
               <p className="text-xs sm:text-sm text-gray-600 mt-2 line-clamp-2">{meeting.description}</p>
