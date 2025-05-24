@@ -370,7 +370,7 @@ const MeetingPage = () => {
         meetingId: meeting._id,
         isInstant: meeting.isInstant,
         startTime: meeting.startTime,
-        serverTime: new Date().toISOString(),
+        serverTime: new Date(),
         clientTime: new Date().toISOString(),
         timezoneOffset: new Date().getTimezoneOffset()
       });
