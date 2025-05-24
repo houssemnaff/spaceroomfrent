@@ -452,27 +452,41 @@ const MeetingPage = () => {
     }
   };
 
-  // Vérifier si une réunion est en direct maintenant (version corrigée)
-const isMeetingLive = (meeting) => {
-  const now = new Date();
-  const startTime = meeting.startTime;
-    console.log("startttttt time live ",startTime);
+  const isMeetingLive = (meeting) => {
+    const now = new Date();
+    const startTime = new Date(meeting.startTime);
+    console.log("startttttt time ",startTime);
+    
+    // Convertir en UTC pour éviter le décalage de fuseau horaire
+    const nowUTC = new Date(now.getTime() + (now.getTimezoneOffset() * 60000));
+    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
 
-  const endTime = new Date(startTime.getTime() + meeting.duration * 60000);
-  
-  // Compare en UTC pour éviter le décalage
-  return now >= startTime && now <= endTime;
-};
+    const endTimeUTC = new Date(startTimeUTC.getTime() + meeting.duration * 60000);
+    
+    console.log("Now UTC:", nowUTC);
+    console.log("Start UTC:", startTimeUTC);
+    console.log("End UTC:", endTimeUTC);
+    
+    return nowUTC >= startTimeUTC && nowUTC <= endTimeUTC;
+  };
 
-// Vérifier si une réunion est prochainement disponible (version corrigée)
-const isMeetingSoonAvailable = (meeting) => {
-  const now = new Date();
-  const startTime = meeting.startTime;
-  console.log("startttttt time ",startTime);
-  // Calcul en millisecondes UTC
-  const timeDiffMinutes = (startTime.getTime() - now.getTime()) / (1000 * 60);
-  return timeDiffMinutes <= 15 && timeDiffMinutes > 0;
-};
+  // Vérifier si une réunion est prochainement disponible (version corrigée UTC)
+  const isMeetingSoonAvailable = (meeting) => {
+    const now = new Date();
+    const startTime = new Date(meeting.startTime);
+    
+    // Convertir en UTC pour éviter le décalage de fuseau horaire
+    const nowUTC = new Date(now.getTime() + (now.getTimezoneOffset() * 60000));
+    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
+        console.log("startttttt time startTimeUTC ",startTimeUTC);
+
+    // Calcul en millisecondes UTC
+    const timeDiffMinutes = (startTimeUTC.getTime() - nowUTC.getTime()) / (1000 * 60);
+    console.log("Time diff minutes:", timeDiffMinutes);
+    
+    return timeDiffMinutes <= 15 && timeDiffMinutes > 0;
+  };
+
 
 // Fonction de formatage (inchangée)
 const formatDateTime = (isoString) => {
