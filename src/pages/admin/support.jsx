@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Mail, MessageSquare, Clock, CheckCircle, XCircle, AlertCircle, Loader2, Plus, Trash2 } from "lucide-react";
-
+//
 const SupportPage = () => {
   const { token } = useAuth();
   const [messages, setMessages] = useState([]);
