@@ -452,55 +452,34 @@ const MeetingPage = () => {
     }
   };
 
+  // Vérifier si une réunion est en direct maintenant
   const isMeetingLive = (meeting) => {
     const now = new Date();
     const startTime = new Date(meeting.startTime);
-    console.log("now nowwwwwwww time ",now);
-    
-    // Convertir en UTC pour éviter le décalage de fuseau horaire
-    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 8000));
-    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
-
-    const endTimeUTC = new Date(startTimeUTC.getTime() + meeting.duration * 60000);
-    
-    console.log("Now UTC:", nowUTC);
-    console.log("Start UTC:", startTimeUTC);
-    console.log("End UTC:", endTimeUTC);
-    
-    return nowUTC >= startTimeUTC && nowUTC <= endTimeUTC;
+    const endTime = new Date(startTime.getTime() + meeting.duration * 60000);
+    return now >= startTime && now <= endTime;
   };
 
-  // Vérifier si une réunion est prochainement disponible (version corrigée UTC)
+  // Vérifier si une réunion est prochainement disponible
   const isMeetingSoonAvailable = (meeting) => {
     const now = new Date();
     const startTime = new Date(meeting.startTime);
-    
-    // Convertir en UTC pour éviter le décalage de fuseau horaire
-    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 10000));
-    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
-        console.log("startttttt time startTimeUTC ",startTimeUTC);
-
-    // Calcul en millisecondes UTC
-    const timeDiffMinutes = (startTimeUTC.getTime() - nowUTC.getTime()) / (1000 * 60);
-    console.log("Time diff minutes:", timeDiffMinutes);
-    
+    const timeDiffMinutes = (startTime - now) / (1000 * 60);
     return timeDiffMinutes <= 15 && timeDiffMinutes > 0;
   };
 
-
-// Fonction de formatage (inchangée)
-const formatDateTime = (isoString) => {
-  const date = new Date(isoString);
-  return date.toLocaleString("fr-FR", {
-    timeZone: 'UTC',
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  });
-};
+  // Fonction unifiée pour formater les dates avec fuseau UTC
+  const formatDateTime = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleString("fr-FR", {
+      timeZone: 'UTC', // Désactive l'ajustement automatique du fuseau
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   // Format date only to display (pour compatibilité avec les composants existants)
   const formatDate = (dateString) => {
