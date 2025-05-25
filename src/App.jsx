@@ -45,80 +45,79 @@ import Support from "./pages/comun/support";
 
 const App = () => {
   return (
-    <Router>
-      <ThemeProvider> 
+   
+      <><ThemeProvider>
       <AuthProvider>
         <NotificationProvider>
-        <SidebarProvider> 
-          <Routes>
-            {/* Routes publiques */}
-            <Route path="/" element={<Acceuil />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/contact" element={<ContactPage />} />
+          <SidebarProvider>
+            <Routes>
+              {/* Routes publiques */}
+              <Route path="/" element={<Acceuil />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/contact" element={<ContactPage />} />
 
-            {/* Route spécifique pour rejoindre un cours - en dehors des routes protégées */}
-            <Route path="/course/join/:accessKey" element={<JoinCourse />} />
+              {/* Route spécifique pour rejoindre un cours - en dehors des routes protégées */}
+              <Route path="/course/join/:accessKey" element={<JoinCourse />} />
 
-            {/* Routes protégées sous /home */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/home" element={<DashboardLayout />}>
-                <Route index element={<MainContent />} />
-                <Route path="agenda" element={<AgendaPage />} />
-                <Route path="coursinscrit" element={<CreatedCourses />} />
-                <Route path="courjoin" element={<JoinedCourses />} />
-                <Route path="archives" element={<ArchivesPage/>} />
-                <Route path="profile" element={<SettingsPage/>} />
-                <Route path="support" element={<Support/>} />
+              {/* Routes protégées sous /home */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/home" element={<DashboardLayout />}>
+                  <Route index element={<MainContent />} />
+                  <Route path="agenda" element={<AgendaPage />} />
+                  <Route path="coursinscrit" element={<CreatedCourses />} />
+                  <Route path="courjoin" element={<JoinedCourses />} />
+                  <Route path="archives" element={<ArchivesPage />} />
+                  <Route path="profile" element={<SettingsPage />} />
+                  <Route path="support" element={<Support />} />
 
 
-             
 
-                {/* Sous-routes pour CoursePage */}
-                <Route path="course/:id" element={<CoursePage />}>
-                  <Route index element={<ChaptersList />} />
-                  <Route path="cours" element={<ChaptersList />} />
-                  <Route path="note" element={<NotesQuiz />} />
-                  <Route path="student" element={<Studentpage />} />
-                  <Route path="devoirs" element={<DevoirsPage />} />
-                  <Route path="assignments/:assignmentId" element={<AssignmentDetail />} />
-                  <Route path="meeting" element={<Meetingpage />} />
-                  <Route path="discussion" element={<DiscussionPage />} />
-                  <Route path="chapter/:chapterId/quiz/:quizId" element={<QuizPage />} />
+
+                  {/* Sous-routes pour CoursePage */}
+                  <Route path="course/:id" element={<CoursePage />}>
+                    <Route index element={<ChaptersList />} />
+                    <Route path="cours" element={<ChaptersList />} />
+                    <Route path="note" element={<NotesQuiz />} />
+                    <Route path="student" element={<Studentpage />} />
+                    <Route path="devoirs" element={<DevoirsPage />} />
+                    <Route path="assignments/:assignmentId" element={<AssignmentDetail />} />
+                    <Route path="meeting" element={<Meetingpage />} />
+                    <Route path="discussion" element={<DiscussionPage />} />
+                    <Route path="chapter/:chapterId/quiz/:quizId" element={<QuizPage />} />
+                  </Route>
+
+
+
+
+
+
                 </Route>
 
 
-               
-
-
-
-              </Route>
-
-
                 {/* Routes admin protégées sous /admin */}
-               
-            <Route element={<AdminProtectedRoute />}>
-              <Route path="/admin" element={<AdminLayout/>}>
-                <Route index element={<Dashboard />} />
-                <Route path="analytec" element={<AnalyticsPage />} />
-                <Route path="courses" element={<CoursesPage />} />
-                <Route path="users" element={<UsersPage />} />
-                <Route path="meeting" element={<MeetingPage />} />
-                <Route path="ressource" element={<RessourcePage />} />
-                <Route path="assignments" element={<DevoirPage />} />
-               
+
+                <Route element={<AdminProtectedRoute />}>
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path="analytec" element={<AnalyticsPage />} />
+                    <Route path="courses" element={<CoursesPage />} />
+                    <Route path="users" element={<UsersPage />} />
+                    <Route path="meeting" element={<MeetingPage />} />
+                    <Route path="ressource" element={<RessourcePage />} />
+                    <Route path="assignments" element={<DevoirPage />} />
+
+                  </Route>
+                </Route>
+
               </Route>
-            </Route>
-           
-            </Route>
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-          </Routes>
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
+            </Routes>
           </SidebarProvider>
         </NotificationProvider>
       </AuthProvider>
-      </ThemeProvider>
-      <ToastContainer
+    </ThemeProvider><ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -129,13 +128,12 @@ const App = () => {
         draggable
         pauseOnHover
         theme="colored"
-        
+
         limit={3}
         style={{ zIndex: 9999 }}
         enableMultiContainer
-        containerId="devoirs-toast"
-      />
-    </Router>
+        containerId="devoirs-toast" /></>
+    
     
   );
 };
