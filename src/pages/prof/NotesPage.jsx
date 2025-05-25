@@ -452,34 +452,53 @@ const MeetingPage = () => {
     }
   };
 
-  // Vérifier si une réunion est en direct maintenant
   const isMeetingLive = (meeting) => {
     const now = new Date();
     const startTime = new Date(meeting.startTime);
-    const endTime = new Date(startTime.getTime() + meeting.duration * 60000);
-    return now >= startTime && now <= endTime;
+    console.log("now nowwwwwwww time ",now);
+    
+    // Convertir en UTC pour éviter le décalage de fuseau horaire
+    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
+
+    const endTimeUTC = new Date(startTimeUTC.getTime() + meeting.duration * 60000);
+    
+    console.log("Now UTC:", now);
+    console.log("Start UTC:", startTimeUTC);
+    console.log("End UTC:", endTimeUTC);
+    
+    return now >= startTimeUTC && now <= endTimeUTC;
   };
 
-  // Vérifier si une réunion est prochainement disponible
+  // Vérifier si une réunion est prochainement disponible (version corrigée UTC)
   const isMeetingSoonAvailable = (meeting) => {
     const now = new Date();
     const startTime = new Date(meeting.startTime);
-    const timeDiffMinutes = (startTime - now) / (1000 * 60);
+    
+    // Convertir en UTC pour éviter le décalage de fuseau horaire
+    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
+        console.log("startttttt time startTimeUTC ",startTimeUTC);
+
+    // Calcul en millisecondes UTC
+    const timeDiffMinutes = (startTimeUTC.getTime() - now.getTime()) / (1000 * 60);
+    console.log("Time diff minutes:", timeDiffMinutes);
+    
     return timeDiffMinutes <= 15 && timeDiffMinutes > 0;
   };
 
-  // Fonction unifiée pour formater les dates avec fuseau UTC
-  const formatDateTime = (isoString) => {
-    const date = new Date(isoString);
-    return date.toLocaleString("fr-FR", {
-      timeZone: 'UTC', // Désactive l'ajustement automatique du fuseau
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+
+// Fonction de formatage (inchangée)
+const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  return date.toLocaleString("fr-FR", {
+    timeZone: 'UTC',
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+};
 
   // Format date only to display (pour compatibilité avec les composants existants)
   const formatDate = (dateString) => {
