@@ -30,6 +30,7 @@ const MeetingPage = () => {
 
   // État pour suivre la réunion actuellement active
   const [activeMeeting, setActiveMeeting] = useState(null);
+  const [meetings, setMeetings] = useState([]);
   const [upcomingMeetings, setUpcomingMeetings] = useState([]);
   const [pastMeetings, setPastMeetings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -82,9 +83,9 @@ const MeetingPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const { upcomingMeetings, pastMeetings } = response.data;
-      setUpcomingMeetings(upcomingMeetings || []);
-      setPastMeetings(pastMeetings || []);
+      const { meetings } = response.data;
+      setMeetings(meetings || []);
+      updateFilteredMeetings(meetings || []);
     } catch (err) {
       console.error("Erreur lors de la récupération des réunions:", err);
       setError("Impossible de charger les réunions. Veuillez réessayer plus tard.");
@@ -92,6 +93,33 @@ const MeetingPage = () => {
       setIsLoading(false);
     }
   };
+
+  // Fonction pour mettre à jour les réunions filtrées
+  const updateFilteredMeetings = (meetingsList) => {
+    const now = new Date();
+    
+    const upcoming = meetingsList.filter(meeting => {
+      const startTime = new Date(meeting.startTime);
+      const endTime = new Date(startTime.getTime() + meeting.duration * 60000);
+      return endTime > now;
+    }).sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+    const past = meetingsList.filter(meeting => {
+      const startTime = new Date(meeting.startTime);
+      const endTime = new Date(startTime.getTime() + meeting.duration * 60000);
+      return endTime <= now;
+    }).sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+
+    setUpcomingMeetings(upcoming);
+    setPastMeetings(past);
+  };
+
+  // Mettre à jour les réunions filtrées quand l'onglet change
+  useEffect(() => {
+    if (meetings.length > 0) {
+      updateFilteredMeetings(meetings);
+    }
+  }, [meetings]);
 
   // Gestion des changements dans le formulaire
   const handleInputChange = (e) => {
@@ -144,7 +172,6 @@ const MeetingPage = () => {
     if (!meetingForm.title || (!meetingForm.isInstant && (!meetingForm.date || !meetingForm.time))) {
       toast.error("Veuillez remplir tous les champs obligatoires.", {
         containerId: "devoirs-toast"
-
       });
       return;
     }
@@ -182,7 +209,6 @@ const MeetingPage = () => {
       
       toast.success("Réunion créée avec succès ! ", {
         containerId: "devoirs-toast"
-
       });
       setIsCreateDialogOpen(false);
       resetForm();
@@ -190,13 +216,12 @@ const MeetingPage = () => {
       if (meetingForm.isInstant) {
         handleJoinMeeting(newMeeting);
       }
+      setIsOperationLoading(false);
     } catch (error) {
       console.error("Erreur lors de la création de la réunion:", error);
       toast.error(error.response?.data?.message || "Impossible de créer la réunion", {
         containerId: "devoirs-toast"
-
       });
-    } finally {
       setIsOperationLoading(false);
     }
   };
@@ -206,7 +231,6 @@ const MeetingPage = () => {
     if (!instantMeetingForm.title) {
       toast.error("Veuillez saisir un titre pour la réunion.", {
         containerId: "devoirs-toast"
-
       });
       return;
     }
@@ -248,19 +272,17 @@ const MeetingPage = () => {
       
       toast.success("Réunion instantanée créée ! Vous rejoignez la salle", {
         containerId: "devoirs-toast"
-
       });
       setIsInstantMeetingDialogOpen(false);
       resetForm();
       
       handleJoinMeeting(newMeeting);
+      setIsOperationLoading(false);
     } catch (error) {
       console.error("Erreur lors de la création de la réunion instantanée:", error);
       toast.error(error.response?.data?.message || "Impossible de créer la réunion instantanée", {
         containerId: "devoirs-toast"
-
       });
-    } finally {
       setIsOperationLoading(false);
     }
   };
@@ -270,7 +292,6 @@ const MeetingPage = () => {
     if (!meetingForm.title || !meetingForm.date || !meetingForm.time) {
       toast.error("Veuillez remplir tous les champs obligatoires.", {
         containerId: "devoirs-toast"
-
       });
       return;
     }
@@ -315,16 +336,15 @@ const MeetingPage = () => {
       
       toast.success("Réunion mise à jour avec succès ! ", {
         containerId: "devoirs-toast"
-
       });
       setIsEditDialogOpen(false);
       resetForm();
+      setIsOperationLoading(false);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de la réunion:", error);
       toast.error(error.response?.data?.message || "Impossible de mettre à jour la réunion", {
-            containerId: "devoirs-toast"
-    
-          });
+        containerId: "devoirs-toast"
+      });
       setIsOperationLoading(false);
     }
   };
@@ -348,17 +368,15 @@ const MeetingPage = () => {
       
       toast.success("Réunion supprimée avec succès ! ", {
         containerId: "devoirs-toast"
-
       });
       setIsDeleteDialogOpen(false);
       setSelectedMeeting(null);
+      setIsOperationLoading(false);
     } catch (error) {
       console.error("Erreur lors de la suppression de la réunion:", error);
       toast.error(error.response?.data?.message || "Impossible de supprimer la réunion", {
         containerId: "devoirs-toast"
-
       });
-    } finally {
       setIsOperationLoading(false);
     }
   };
@@ -381,9 +399,8 @@ const MeetingPage = () => {
         const timeDiff = (meetingTime - now) / (1000 * 60);
         
         if (timeDiff > 15) {
-          toast.warning(`Cette réunion n'est pas encore disponible. Elle sera accessible 15 minutes avant l'heure prévue (${formatDateTime(meeting.startTime)}).`, {
+          toast.warning(`Cette réunion n'est pas encore disponible. Elle sera accessible 15 minutes avant l'heure prévue (${formatTime(meeting.startTime)}).`, {
             containerId: "devoirs-toast"
-    
           });
           return;
         }
@@ -404,13 +421,11 @@ const MeetingPage = () => {
       setActiveMeeting(updatedMeeting);
       toast.success("Connexion à la réunion établie ! ", {
         containerId: "devoirs-toast"
-
       });
     } catch (error) {
       console.error("Erreur lors de l'accès à la réunion:", error);
       toast.error(error.response?.data?.message || "Impossible de rejoindre la réunion", {
         containerId: "devoirs-toast"
-
       });
     }
   };
@@ -422,6 +437,7 @@ const MeetingPage = () => {
 
   // Marquer une réunion comme ayant un enregistrement disponible
   const handleSetRecordingAvailable = async (meeting, recordingUrl = "") => {
+    setIsOperationLoading(true);
     try {
       const response = await axios.put(
         `${API_URL}/meetings/${meeting._id}/recording`,
@@ -441,82 +457,50 @@ const MeetingPage = () => {
       
       toast.success("Enregistrement marqué comme disponible ! ", {
         containerId: "devoirs-toast"
-
       });
+      setIsOperationLoading(false);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de l'enregistrement:", error);
       toast.error(error.response?.data?.message || "Impossible de mettre à jour l'enregistrement", {
         containerId: "devoirs-toast"
-
       });
+      setIsOperationLoading(false);
     }
   };
 
+  // Vérifier si une réunion est en direct maintenant
   const isMeetingLive = (meeting) => {
     const now = new Date();
+    console.log("now",now)
     const startTime = new Date(meeting.startTime);
-    console.log("now nowwwwwwww time ",now);
-    
-    // Convertir en UTC pour éviter le décalage de fuseau horaire
-    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
+    console.log("startTime",startTime)
 
-    const endTimeUTC = new Date(startTimeUTC.getTime() + meeting.duration * 60000);
-    
-    console.log("Now UTC:", now);
-    console.log("Start UTC:", startTimeUTC);
-    console.log("End UTC:", endTimeUTC);
-    
-    return now >= startTimeUTC && now <= endTimeUTC;
+    const endTime = new Date(startTime.getTime() + meeting.duration * 60000);
+    console.log("endTime",endTime)
+    console.log("isMeetingLive",now >= startTime && now <= endTime)
+    return now >= startTime && now <= endTime;
   };
 
-  // Vérifier si une réunion est prochainement disponible (version corrigée UTC)
+  // Vérifier si une réunion est prochainement disponible
   const isMeetingSoonAvailable = (meeting) => {
     const now = new Date();
     const startTime = new Date(meeting.startTime);
-     console.log("startttttt time startTime mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ",startTime);
-
-    // Convertir en UTC pour éviter le décalage de fuseau horaire
-    const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
-        console.log("startttttt time startTimeUTC ",startTimeUTC);
-
-    // Calcul en millisecondes UTC
-    const timeDiffMinutes = (startTimeUTC.getTime() - now.getTime()) / (1000 * 60);
-    console.log("Time diff minutes:", timeDiffMinutes);
-    
+    const timeDiffMinutes = (startTime - now) / (1000 * 60);
     return timeDiffMinutes <= 15 && timeDiffMinutes > 0;
   };
 
-
-// Fonction de formatage (inchangée)
-const formatDateTime = (isoString) => {
-  const date = new Date(isoString);
-  return date.toLocaleString("fr-FR", {
-    timeZone: 'UTC',
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  });
-};
-
-  // Format date only to display (pour compatibilité avec les composants existants)
+  // Format date to display
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString("fr-FR", {
-      timeZone: 'UTC',
+    return new Date(dateString).toLocaleDateString("fr-FR", {
       weekday: "long",
       day: "numeric",
       month: "long",
     });
   };
 
-  // Format time only to display (pour compatibilité avec les composants existants)
+  // Format time to display
   const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString("fr-FR", {
-      timeZone: 'UTC',
+    return new Date(dateString).toLocaleTimeString("fr-FR", {
       hour: "2-digit",
       minute: "2-digit",
     });
@@ -585,7 +569,6 @@ const formatDateTime = (isoString) => {
                   isMeetingSoonAvailable={isMeetingSoonAvailable}
                   formatDate={formatDate}
                   formatTime={formatTime}
-                  formatDateTime={formatDateTime}
                 />
               ) : (
                 <EmptyState
@@ -634,7 +617,6 @@ const formatDateTime = (isoString) => {
                   isPast={true}
                   formatDate={formatDate}
                   formatTime={formatTime}
-                  formatDateTime={formatDateTime}
                 />
               ) : (
                 <EmptyState
@@ -685,7 +667,6 @@ const formatDateTime = (isoString) => {
           isOperationLoading={isOperationLoading}
           formatDate={formatDate}
           formatTime={formatTime}
-          formatDateTime={formatDateTime}
         />
       </div>
      
