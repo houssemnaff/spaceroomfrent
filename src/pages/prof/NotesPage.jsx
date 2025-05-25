@@ -458,7 +458,7 @@ const MeetingPage = () => {
     console.log("startttttt time ",startTime);
     
     // Convertir en UTC pour éviter le décalage de fuseau horaire
-    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 30000));
     const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
 
     const endTimeUTC = new Date(startTimeUTC.getTime() + meeting.duration * 60000);
@@ -476,7 +476,7 @@ const MeetingPage = () => {
     const startTime = new Date(meeting.startTime);
     
     // Convertir en UTC pour éviter le décalage de fuseau horaire
-    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 30000));
     const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
         console.log("startttttt time startTimeUTC ",startTimeUTC);
 
