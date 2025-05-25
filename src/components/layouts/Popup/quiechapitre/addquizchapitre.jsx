@@ -27,6 +27,50 @@ const AddQuizDialog = ({ isOpen, onClose, courseId, chapterId, onQuizAdded }) =>
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        
+        // Validation spéciale pour les dates
+        if (name === "availableFrom") {
+            const startDate = new Date(value);
+            const endDate = formData.availableUntil ? new Date(formData.availableUntil) : null;
+            const minEndDate = new Date(startDate.getTime() + formData.timeLimit * 60000); // Ajoute le temps limite en millisecondes
+            
+            // Si la date de fin existe et est antérieure à la date minimale requise
+            if (endDate && endDate < minEndDate) {
+                toast.info(`La date de fin doit être au moins ${formData.timeLimit} minutes après la date de début`, {
+                    containerId: "devoirs-toast"
+                });
+                return;
+            }
+        }
+        
+        if (name === "availableUntil") {
+            const startDate = new Date(formData.availableFrom);
+            const endDate = value ? new Date(value) : null;
+            const minEndDate = new Date(startDate.getTime() + formData.timeLimit * 60000);
+            
+            // Si la date de fin est antérieure à la date minimale requise
+            if (endDate && endDate < minEndDate) {
+                toast.info(`La date de fin doit être au moins ${formData.timeLimit} minutes après la date de début`, {
+                    containerId: "devoirs-toast"
+                });
+                return;
+            }
+        }
+
+        // Si le temps limite change, vérifier la date de fin
+        if (name === "timeLimit") {
+            const startDate = new Date(formData.availableFrom);
+            const endDate = formData.availableUntil ? new Date(formData.availableUntil) : null;
+            const minEndDate = new Date(startDate.getTime() + value * 60000);
+            
+            if (endDate && endDate < minEndDate) {
+                toast.info(`La date de fin doit être au moins ${value} minutes après la date de début`, {
+                    containerId: "devoirs-toast"
+                });
+                return;
+            }
+        }
+
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -97,6 +141,18 @@ const AddQuizDialog = ({ isOpen, onClose, courseId, chapterId, onQuizAdded }) =>
     const handleSubmit = async (e) => {
         e.preventDefault();
         
+        // Validation des dates
+        const startDate = new Date(formData.availableFrom);
+        const endDate = formData.availableUntil ? new Date(formData.availableUntil) : null;
+        const minEndDate = new Date(startDate.getTime() + formData.timeLimit * 60000);
+        
+        if (endDate && endDate < minEndDate) {
+            toast.error(`La date de fin doit être au moins ${formData.timeLimit} minutes après la date de début`, {
+                containerId: "devoirs-toast"
+            });
+            return;
+        }
+
         // Validation des doublons
         const hasDuplicates = formData.questions.some((q, qIndex) => {
             const optionTexts = q.options.map(opt => opt.text.trim().toLowerCase());
@@ -107,8 +163,7 @@ const AddQuizDialog = ({ isOpen, onClose, courseId, chapterId, onQuizAdded }) =>
         if (hasDuplicates) {
             toast.info("Certaines questions ont des options en double ou vides. Veuillez corriger avant de soumettre.", {
                 containerId: "devoirs-toast"
-          
-              });
+            });
             return;
         }
         
@@ -127,13 +182,12 @@ const AddQuizDialog = ({ isOpen, onClose, courseId, chapterId, onQuizAdded }) =>
             const response = await QuizService.createQuiz(quizData, token);
             onQuizAdded(response.data);
             onClose();
+            setIsSubmitting(false);
         } catch (error) {
             console.error("Error creating quiz:", error);
             toast.error("Erreur lors de la création du quiz", {
                 containerId: "devoirs-toast"
-          
-              });
-        } finally {
+            });
             setIsSubmitting(false);
         }
     };
@@ -208,6 +262,7 @@ const AddQuizDialog = ({ isOpen, onClose, courseId, chapterId, onQuizAdded }) =>
                                             value={formData.availableFrom}
                                             onChange={handleInputChange}
                                             required
+                                            min={new Date().toISOString().slice(0, 16)}
                                             className="mt-1.5"
                                         />
                                     </div>
@@ -219,8 +274,17 @@ const AddQuizDialog = ({ isOpen, onClose, courseId, chapterId, onQuizAdded }) =>
                                             name="availableUntil"
                                             value={formData.availableUntil}
                                             onChange={handleInputChange}
+                                            min={new Date(new Date(formData.availableFrom).getTime() + formData.timeLimit * 60000).toISOString().slice(0, 16)}
                                             className="mt-1.5"
                                         />
+                                        {formData.availableUntil && (
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                                Le quiz sera disponible pendant {Math.round((new Date(formData.availableUntil) - new Date(formData.availableFrom)) / (1000 * 60 * 60))} heures
+                                                {formData.timeLimit && (
+                                                    <span> (Temps limite: {formData.timeLimit} minutes)</span>
+                                                )}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 
