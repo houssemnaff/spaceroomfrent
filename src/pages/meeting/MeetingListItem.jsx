@@ -24,7 +24,6 @@ const MeetingListItem = ({
  const formatDateTime = (isoString) => {
   const date = new Date(isoString);
   return date.toLocaleString("fr-FR", {
-    timeZone: 'UTC', // Désactive l'ajustement automatique du fuseau
     day: "2-digit",
     month: "long",
     year: "numeric",
