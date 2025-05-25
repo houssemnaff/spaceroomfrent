@@ -473,7 +473,8 @@ const MeetingPage = () => {
   const isMeetingSoonAvailable = (meeting) => {
     const now = new Date();
     const startTime = new Date(meeting.startTime);
-    
+     console.log("startttttt time startTime mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ",startTime);
+
     // Convertir en UTC pour éviter le décalage de fuseau horaire
     const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
         console.log("startttttt time startTimeUTC ",startTimeUTC);
