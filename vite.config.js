@@ -10,4 +10,19 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Ajoutez ces configurations critiques
+  base: '/',
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
+  server: {
+    historyApiFallback: true,
+    strictPort: true,
+    port: 5173
+  },
+  preview: {
+    port: 5173,
+    strictPort: true
+  }
 })
