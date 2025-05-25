@@ -455,10 +455,10 @@ const MeetingPage = () => {
   const isMeetingLive = (meeting) => {
     const now = new Date();
     const startTime = new Date(meeting.startTime);
-    console.log("startttttt time ",startTime);
+    console.log("now nowwwwwwww time ",now);
     
     // Convertir en UTC pour éviter le décalage de fuseau horaire
-    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 10000));
+    const nowUTC = new Date(now.getTime() - (now.getTimezoneOffset() * 8000));
     const startTimeUTC = new Date(startTime.getTime() + (startTime.getTimezoneOffset() * 60000));
 
     const endTimeUTC = new Date(startTimeUTC.getTime() + meeting.duration * 60000);
