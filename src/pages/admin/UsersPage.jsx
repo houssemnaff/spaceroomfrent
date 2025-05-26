@@ -101,7 +101,7 @@ const Utilisateurs = () => {
       const details = await adminService.getUserStats(userId);
 
       setUserDetails(details);
-      console.log("user detail", details);
+     // console.log("user detail", details);
       setShowUserDetailsModal(true);
       setLoading(false);
     } catch (error) {
@@ -260,9 +260,8 @@ const Utilisateurs = () => {
       </div>
     );
   }
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-2 sm:p-4 lg:p-6">
       {error && (
         <Alert variant="destructive">
           <AlertTitle>Erreur</AlertTitle>
@@ -270,81 +269,84 @@ const Utilisateurs = () => {
         </Alert>
       )}
 
-      <div>
-        <h1 className="text-3xl font-bold mb-2">Gestion des Utilisateurs</h1>
-        <p className="text-muted-foreground">Liste des utilisateurs de la plateforme</p>
+      <div className="text-center sm:text-left">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Gestion des Utilisateurs</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Liste des utilisateurs de la plateforme</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
         <Card className="bg-gradient-to-br from-blue-100 to-white dark:from-blue-950/20 dark:to-gray-950">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total utilisateurs</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium">Total utilisateurs</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
 
         <Card className="bg-gradient-to-br from-red-100 to-white dark:from-blue-950/20 dark:to-gray-950">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Étudiants inscrits</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium">Étudiants inscrits</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.etudiants}</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{stats.etudiants}</div>
           </CardContent>
         </Card>
         
         <Card className="bg-gradient-to-br from-yellow-100 to-white dark:from-blue-950/20 dark:to-gray-950">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Enseignants</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium">Enseignants</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.enseignants}</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{stats.enseignants}</div>
           </CardContent>
         </Card>
 
         <Card className="bg-gradient-to-br from-green-100 to-white dark:from-blue-950/20 dark:to-gray-950">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Administrateurs</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+            <CardTitle className="text-xs sm:text-sm font-medium">Administrateurs</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.administrateurs}</div>
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="text-lg sm:text-2xl font-bold">{stats.administrateurs}</div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-3 sm:p-6">
         <Tabs defaultValue="all" onValueChange={setActiveTab}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
-            <TabsList className="h-9">
-              <TabsTrigger value="all">Tous les utilisateurs</TabsTrigger>
-              <TabsTrigger value="students">Étudiants</TabsTrigger>
-              <TabsTrigger value="teachers">Enseignants</TabsTrigger>
-              <TabsTrigger value="admins">Administrateurs</TabsTrigger>
-            </TabsList>
-          </div>
+        <div className="flex flex-col gap-4 mb-4 sm:mb-6">
+  <div className="overflow-x-auto">
+    <TabsList className="h-9 w-full sm:w-auto flex justify-start">
+      <TabsTrigger value="all" className="flex-1 sm:flex-none text-xs sm:text-sm px-2 sm:px-4">Tous</TabsTrigger>
+      <TabsTrigger value="students" className="flex-1 sm:flex-none text-xs sm:text-sm px-2 sm:px-4">Étudiants</TabsTrigger>
+      <TabsTrigger value="teachers" className="flex-1 sm:flex-none text-xs sm:text-sm px-2 sm:px-4">Enseignants</TabsTrigger>
+      <TabsTrigger value="admins" className="flex-1 sm:flex-none text-xs sm:text-sm px-2 sm:px-4">Admins</TabsTrigger>
+    </TabsList>
+  </div>
+</div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-between mb-6">
-            <div className="relative w-full sm:w-[300px]">
-              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+          <div className="flex flex-col gap-4 mb-4 sm:mb-6">
+            <div className="relative w-full">
+              <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Rechercher un utilisateur..."
-                className="pl-10"
+                className="pl-10 text-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="rounded-md border overflow-hidden">
+          {/* Version Desktop - Table */}
+          <div className="hidden md:block rounded-md border overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Utilisateur</TableHead>
-                  <TableHead>Rôle</TableHead>
-                  <TableHead>Cours inscrits</TableHead>
-                  <TableHead>Cours créés</TableHead>
-                  <TableHead className="w-[120px] text-right">Actions</TableHead>
+                  <TableHead className="text-sm">Utilisateur</TableHead>
+                  <TableHead className="text-sm">Rôle</TableHead>
+                  <TableHead className="text-sm">Cours inscrits</TableHead>
+                  <TableHead className="text-sm">Cours créés</TableHead>
+                  <TableHead className="w-[120px] text-right text-sm">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -353,7 +355,7 @@ const Utilisateurs = () => {
                     <TableRow key={user._id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <Avatar>
+                          <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
                             {user.imageurl ? (
                               <AvatarImage src={user.imageurl} alt={user.name} />
                             ) : (
@@ -363,42 +365,41 @@ const Utilisateurs = () => {
                             )}
                           </Avatar>
                           <div>
-                            <p className="font-medium">{user.name}</p>
-                            <p className="text-xs text-muted-foreground">{user.email}</p>
+                            <p className="font-medium text-sm lg:text-base">{user.name}</p>
+                            <p className="text-xs text-muted-foreground truncate max-w-[200px]">{user.email}</p>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className={`font-normal ${user.role === "admin" ? "border-alerte text-alerte" : user.role === "teacher" ? "border-progression text-progression" : "border-cours text-cours"}`}>
+                        <Badge variant="outline" className={`font-normal text-xs ${user.role === "admin" ? "border-alerte text-alerte" : user.role === "teacher" ? "border-progression text-progression" : "border-cours text-cours"}`}>
                           {getRoleName(user.role)}
                         </Badge>
                       </TableCell>
-                      <TableCell>{user.enrolledCourses || 0}</TableCell>
-                      <TableCell>{user.createdCourses || 0}</TableCell>
+                      <TableCell className="text-sm">{user.enrolledCourses || 0}</TableCell>
+                      <TableCell className="text-sm">{user.createdCourses || 0}</TableCell>
                       <TableCell>
                         <div className="flex gap-1 justify-end">
-                          {/* Afficher l'icône de détails uniquement pour les non-administrateurs */}
                           {shouldShowDetailsIcon(user) && (
                             <Button
                               size="icon"
                               variant="ghost"
                               onClick={() => handleViewUserDetails(user._id)}
                               title="Voir détails"
+                              className="w-8 h-8"
                             >
-                              <Eye size={16} />
+                              <Eye size={14} />
                             </Button>
                           )}
                           
-                          {/* Désactiver le bouton de suppression pour les administrateurs */}
                           <Button
                             size="icon"
                             variant="ghost"
                             onClick={(e) => handleDeleteClick(user, e)}
                             title={isDeleteButtonDisabled(user) ? "Les administrateurs ne peuvent pas être supprimés" : "Supprimer l'utilisateur"}
-                            className={`${isDeleteButtonDisabled(user) ? "text-gray-400 cursor-not-allowed" : "text-red-500 hover:text-red-700"}`}
+                            className={`w-8 h-8 ${isDeleteButtonDisabled(user) ? "text-gray-400 cursor-not-allowed" : "text-red-500 hover:text-red-700"}`}
                             disabled={isDeleteButtonDisabled(user)}
                           >
-                            <Trash size={16} />
+                            <Trash size={14} />
                           </Button>
                         </div>
                       </TableCell>
@@ -414,67 +415,141 @@ const Utilisateurs = () => {
               </TableBody>
             </Table>
           </div>
+
+          {/* Version Mobile - Cards */}
+          <div className="md:hidden space-y-3">
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
+                <Card key={user._id} className="p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <Avatar className="w-12 h-12 flex-shrink-0">
+                        {user.imageurl ? (
+                          <AvatarImage src={user.imageurl} alt={user.name} />
+                        ) : (
+                          <AvatarFallback className={getRoleColor(user.role)}>
+                            {getInitials(user.name)}
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate">{user.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                        <Badge variant="outline" className={`mt-1 font-normal text-xs ${user.role === "admin" ? "border-alerte text-alerte" : user.role === "teacher" ? "border-progression text-progression" : "border-cours text-cours"}`}>
+                          {getRoleName(user.role)}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-1 ml-2">
+                      {shouldShowDetailsIcon(user) && (
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => handleViewUserDetails(user._id)}
+                          title="Voir détails"
+                          className="w-8 h-8"
+                        >
+                          <Eye size={14} />
+                        </Button>
+                      )}
+                      
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={(e) => handleDeleteClick(user, e)}
+                        title={isDeleteButtonDisabled(user) ? "Les administrateurs ne peuvent pas être supprimés" : "Supprimer l'utilisateur"}
+                        className={`w-8 h-8 ${isDeleteButtonDisabled(user) ? "text-gray-400 cursor-not-allowed" : "text-red-500 hover:text-red-700"}`}
+                        disabled={isDeleteButtonDisabled(user)}
+                      >
+                        <Trash size={14} />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t">
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">Cours inscrits</p>
+                      <p className="text-sm font-semibold">{user.enrolledCourses || 0}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">Cours créés</p>
+                      <p className="text-sm font-semibold">{user.createdCourses || 0}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <Card className="p-8">
+                <p className="text-center text-muted-foreground">Aucun utilisateur trouvé</p>
+              </Card>
+            )}
+          </div>
         </Tabs>
       </Card>
 
       {/* Modal for user details */}
       {userDetails && (
         <Dialog open={showUserDetailsModal} onOpenChange={setShowUserDetailsModal}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-sm sm:max-w-md mx-2 sm:mx-auto">
             <DialogHeader>
-              <DialogTitle>Détails de l'utilisateur</DialogTitle>
+              <DialogTitle className="text-lg sm:text-xl">Détails de l'utilisateur</DialogTitle>
             </DialogHeader>
 
-            <div className="space-y-6">
-              <div className="flex flex-col items-center gap-4">
-                <Avatar className="w-24 h-24">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="flex flex-col items-center gap-3 sm:gap-4">
+                <Avatar className="w-20 h-20 sm:w-24 sm:h-24">
                   {userDetails.userInfo.imageurl ? (
                     <AvatarImage src={userDetails.userInfo.imageurl} alt={userDetails.userInfo.name} />
                   ) : (
-                    <AvatarFallback className={`text-xl ${getRoleColor(userDetails.userInfo.role)}`}>
+                    <AvatarFallback className={`text-lg sm:text-xl ${getRoleColor(userDetails.userInfo.role)}`}>
                       {getInitials(userDetails.userInfo.name)}
                     </AvatarFallback>
                   )}
                 </Avatar>
 
                 <div className="text-center">
-                  <h2 className="text-xl font-bold">{userDetails.userInfo.name}</h2>
-                  <p className="text-sm text-muted-foreground">{userDetails.userInfo.email}</p>
-                  <Badge variant="outline" className={`mt-2 font-normal ${userDetails.userInfo.role === "admin" ? "border-alerte text-alerte" : userDetails.userInfo.role === "teacher" ? "border-progression text-progression" : "border-cours text-cours"}`}>
+                  <h2 className="text-lg sm:text-xl font-bold">{userDetails.userInfo.name}</h2>
+                  <p className="text-xs sm:text-sm text-muted-foreground break-all">{userDetails.userInfo.email}</p>
+                  <Badge variant="outline" className={`mt-2 font-normal text-xs ${userDetails.userInfo.role === "admin" ? "border-alerte text-alerte" : userDetails.userInfo.role === "teacher" ? "border-progression text-progression" : "border-cours text-cours"}`}>
                     {getRoleName(userDetails.userInfo.role)}
                   </Badge>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="border rounded p-3">
-                  <p className="text-sm text-muted-foreground">Cours inscrits</p>
-                  <p className="text-xl font-bold">{userDetails.metrics.coursesEnrolled}</p>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="border rounded p-3 text-center">
+                  <p className="text-xs sm:text-sm text-muted-foreground">Cours inscrits</p>
+                  <p className="text-lg sm:text-xl font-bold">{userDetails.metrics.coursesEnrolled}</p>
                 </div>
-                <div className="border rounded p-3">
-                  <p className="text-sm text-muted-foreground">Cours créés</p>
-                  <p className="text-xl font-bold">{userDetails.metrics.coursesCreated}</p>
+                <div className="border rounded p-3 text-center">
+                  <p className="text-xs sm:text-sm text-muted-foreground">Cours créés</p>
+                  <p className="text-lg sm:text-xl font-bold">{userDetails.metrics.coursesCreated}</p>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Membre depuis</p>
-                <p>{formatDate(userDetails.userInfo.createdAt)}</p>
-                <p className="text-sm text-muted-foreground mt-2">Dernière activité</p>
-                <p>{formatDate(userDetails.userInfo.lastActive)}</p>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Membre depuis</p>
+                  <p className="text-sm sm:text-base">{formatDate(userDetails.userInfo.createdAt)}</p>
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Dernière activité</p>
+                  <p className="text-sm sm:text-base">{formatDate(userDetails.userInfo.lastActive)}</p>
+                </div>
               </div>
 
-              <div className="flex justify-between">
-                <Button variant="outline" onClick={() => setShowUserDetailsModal(false)}>
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-2">
+                <Button variant="outline" onClick={() => setShowUserDetailsModal(false)} className="text-sm">
                   Fermer
                 </Button>
-                {/* Désactiver le bouton de suppression pour les administrateurs dans la modal */}
                 {!isDeleteButtonDisabled(userDetails.userInfo) && (
                   <Button 
                     variant="destructive" 
                     onClick={() => handleDeleteClick(userDetails.userInfo)}
+                    className="text-sm"
                   >
-                    <Trash size={16} className="mr-2" />
+                    <Trash size={14} className="mr-2" />
                     Supprimer
                   </Button>
                 )}
@@ -486,24 +561,24 @@ const Utilisateurs = () => {
 
       {/* Delete confirmation dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-sm sm:max-w-md mx-2 sm:mx-auto">
           <AlertDialogHeader>
-            <AlertDialogTitle>
+            <AlertDialogTitle className="text-lg">
               Supprimer l'utilisateur
             </AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-sm">
               Êtes-vous sûr de vouloir supprimer l'utilisateur "{userToDelete?.name}" ?
               <br />
               Cette action est irréversible et supprimera toutes les données associées à cet utilisateur.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+            <AlertDialogCancel className="text-sm">
               Annuler
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white text-sm"
             >
               Supprimer
             </AlertDialogAction>
