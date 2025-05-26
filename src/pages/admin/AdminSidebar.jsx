@@ -48,7 +48,7 @@ const AdminSidebar = () => {
     { icon: FileText, text: "Ressources", description: "Documents pédagogiques", path: "/admin/ressource" },
    
     { icon: AlertTriangle, text: "Signalements", description: "Modération des contenus", path: "/admin/reports" },
-    { icon: Settings, text: "profil", description: "Configuration du profil", path: "/admin/settings" }
+    { icon: Settings, text: "profil", description: "Configuration du profil", path: "/admin/profile" }
   ];
 
   // Classes conditionnelles pour le dark mode

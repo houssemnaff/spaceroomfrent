@@ -42,6 +42,7 @@ import { ToastContainer } from "react-toastify";
 import ForgotPassword from "./pages/comun/passwordoublier";
 import ResetPassword from "./pages/comun/resetpassword";
 import Support from "./pages/comun/support";
+import SupportPage from "./pages/admin/support";
 
 const App = () => {
   return (
@@ -106,6 +107,9 @@ const App = () => {
                     <Route path="meeting" element={<MeetingPage />} />
                     <Route path="ressource" element={<RessourcePage />} />
                     <Route path="assignments" element={<DevoirPage />} />
+                    <Route path="reports" element={<SupportPage/>} />
+                    <Route path="profile" element={<SettingsPage />} />
+
 
                   </Route>
                 </Route>
