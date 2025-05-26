@@ -207,11 +207,11 @@ const Utilisateurs = () => {
   const getRoleColor = (role) => {
     switch (role) {
       case "user":
-        return "bg-cours text-black dark:text-white";
+        return "flex items-center justify-center h-8 w-8 rounded-full bg-cours text-black dark:text-white";
       case "admin":
-        return "bg-alerte text-white";
+        return "flex items-center justify-center h-8 w-8 rounded-full bg-cours text-black dark:text-white";
       default:
-        return "bg-muted text-muted-foreground";
+        return "flex items-center justify-center h-8 w-8 rounded-full bg-cours text-black dark:text-white";
     }
   };
 
