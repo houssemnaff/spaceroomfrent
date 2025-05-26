@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,7 +13,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Mail, MessageSquare, Clock, CheckCircle, XCircle, AlertCircle, Loader2, Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-//
+
 const SupportPage = () => {
   const { token } = useAuth();
   const [messages, setMessages] = useState([]);
@@ -218,13 +219,13 @@ const SupportPage = () => {
         : resolvedMessages;
 
   return (
-    <div className="space-y-8 p-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Messages de Support</h1>
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-3 sm:p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">Messages de Support</h1>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card
           className={`bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 cursor-pointer transition-all ${activeTab === "all" ? "ring-2 ring-primary" : ""}`}
           onClick={() => setActiveTab("all")}
@@ -291,9 +292,9 @@ const SupportPage = () => {
       </div>
 
       {/* Messages */}
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold">
             {activeTab === "all" ? "Tous les messages" :
               activeTab === "pending" ? "Messages en attente" :
                 activeTab === "in_progress" ? "Messages en cours" : "Messages résolus"}
@@ -316,44 +317,44 @@ const SupportPage = () => {
                 className="overflow-hidden border shadow-sm hover:shadow-md transition-shadow duration-300"
               >
                 <CardHeader className={`${statusConfig.bg} border-b`}>
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                     <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-full ${statusConfig.bg} border`}>
+                      <div className={`p-2 rounded-full ${statusConfig.bg} border flex-shrink-0`}>
                         {statusConfig.icon}
                       </div>
-                      <div>
-                        <CardTitle className="text-lg">{message.subject}</CardTitle>
+                      <div className="min-w-0 flex-1">
+                        <CardTitle className="text-base sm:text-lg break-words">{message.subject}</CardTitle>
                         <div className="flex items-center gap-2 mt-1">
-                          <Mail className="h-3 w-3 text-muted-foreground" />
-                          <p className="text-sm text-muted-foreground">
+                          <Mail className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                          <p className="text-sm text-muted-foreground break-all">
                             {message.name} ({message.email})
                           </p>
                         </div>
                       </div>
                     </div>
-                    <Badge className={`${statusConfig.bg} ${statusConfig.color} hover:${statusConfig.color}`}>
+                    <Badge className={`${statusConfig.bg} ${statusConfig.color} hover:${statusConfig.color} flex-shrink-0`}>
                       {statusConfig.label}
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   <div className="space-y-4">
                     <div>
                       <h3 className="font-semibold mb-2 flex items-center gap-2">
-                        <MessageSquare className="h-4 w-4" />
+                        <MessageSquare className="h-4 w-4 flex-shrink-0" />
                         Message initial:
                       </h3>
-                      <p className="text-muted-foreground bg-muted/30 p-4 rounded-lg">{message.message}</p>
+                      <p className="text-muted-foreground bg-muted/30 p-3 sm:p-4 rounded-lg break-words">{message.message}</p>
                     </div>
 
                     {message.adminResponse && (
-                      <div className="bg-blue-50 dark:bg-blue-950/10 p-4 rounded-lg border-l-4 border-blue-500">
-                        <div className="flex justify-between items-start">
+                      <div className="bg-blue-50 dark:bg-blue-950/10 p-3 sm:p-4 rounded-lg border-l-4 border-blue-500">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                           <h3 className="font-semibold mb-2 text-blue-600 dark:text-blue-400 flex items-center gap-2">
-                            <MessageSquare className="h-4 w-4" />
+                            <MessageSquare className="h-4 w-4 flex-shrink-0" />
                             Réponse de l'administrateur:
                           </h3>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                          <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
                             {new Date(message.updatedAt).toLocaleString('fr-FR', {
                               year: 'numeric',
                               month: '2-digit',
@@ -363,17 +364,17 @@ const SupportPage = () => {
                             })}
                           </span>
                         </div>
-                        <p className="text-muted-foreground">{message.adminResponse}</p>
+                        <p className="text-muted-foreground break-words">{message.adminResponse}</p>
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        <span>{format(new Date(message.createdAt), "PPP", { locale: fr })}</span>
+                        <Clock className="h-3 w-3 flex-shrink-0" />
+                        <span className="break-words">{format(new Date(message.createdAt), "PPP", { locale: fr })}</span>
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                         <Button
                           onClick={() => {
                             setSelectedMessage(message);
@@ -382,13 +383,13 @@ const SupportPage = () => {
                             setIsDialogOpen(true);
                           }}
                           variant={hasResponse ? "secondary" : "outline"}
-                          className={hasResponse
+                          className={`w-full sm:w-auto text-xs sm:text-sm ${hasResponse
                             ? "border-green-200 bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-950/20 dark:border-green-900 dark:text-green-400"
                             : "border-blue-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600 dark:border-blue-900 dark:hover:bg-blue-950 dark:hover:border-blue-800"
-                          }
+                          }`}
                         >
-                          <MessageSquare className="h-4 w-4 mr-2" />
-                          {hasResponse ? "Voir/Modifier réponse" : "Répondre"}
+                          <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
+                          <span className="truncate">{hasResponse ? "Voir/Modifier réponse" : "Répondre"}</span>
                         </Button>
 
                         <Button
@@ -398,10 +399,10 @@ const SupportPage = () => {
                             setIsStatusDialogOpen(true);
                           }}
                           variant="outline"
-                          className="border-amber-200 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-600 dark:border-amber-900 dark:hover:bg-amber-950 dark:hover:border-amber-800"
+                          className="w-full sm:w-auto text-xs sm:text-sm border-amber-200 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-600 dark:border-amber-900 dark:hover:bg-amber-950 dark:hover:border-amber-800"
                         >
-                          <AlertCircle className="h-4 w-4 mr-2" />
-                          Modifier le statut
+                          <AlertCircle className="h-4 w-4 mr-2 flex-shrink-0" />
+                          <span className="truncate">Modifier le statut</span>
                         </Button>
 
                         <Button
@@ -410,10 +411,10 @@ const SupportPage = () => {
                             setIsDeleteDialogOpen(true);
                           }}
                           variant="outline"
-                          className="border-red-200 hover:bg-red-50 hover:border-red-300 hover:text-red-600 dark:border-red-900 dark:hover:bg-red-950 dark:hover:border-red-800 bg-red-100"
+                          className="w-full sm:w-auto text-xs sm:text-sm border-red-200 hover:bg-red-50 hover:border-red-300 hover:text-red-600 dark:border-red-900 dark:hover:bg-red-950 dark:hover:border-red-800 bg-red-100"
                         >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Supprimer
+                          <Trash2 className="h-4 w-4 mr-2 flex-shrink-0" />
+                          <span className="truncate">Supprimer</span>
                         </Button>
                       </div>
                     </div>
@@ -427,9 +428,9 @@ const SupportPage = () => {
 
       {/* Reply Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto mx-4 sm:mx-0">
           <DialogHeader>
-            <DialogTitle className="text-xl">
+            <DialogTitle className="text-lg sm:text-xl break-words">
               {selectedMessage?.adminResponse ? "Modifier la réponse" : "Répondre au message"}: {selectedMessage?.subject}
             </DialogTitle>
           </DialogHeader>
@@ -472,16 +473,16 @@ const SupportPage = () => {
               />
             </div>
           </div>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="w-full sm:w-auto">
               Annuler
             </Button>
             <Button
               onClick={handleResponse}
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+              className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
             >
               <MessageSquare className="h-4 w-4 mr-2" />
-              {selectedMessage?.adminResponse ? "Mettre à jour la réponse" : "Envoyer la réponse"}
+              <span className="truncate">{selectedMessage?.adminResponse ? "Mettre à jour la réponse" : "Envoyer la réponse"}</span>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -489,9 +490,9 @@ const SupportPage = () => {
 
       {/* Status Update Dialog */}
       <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md mx-4 sm:mx-0">
           <DialogHeader>
-            <DialogTitle className="text-xl">
+            <DialogTitle className="text-lg sm:text-xl break-words">
               Modifier le statut: {selectedMessage?.subject}
             </DialogTitle>
           </DialogHeader>
@@ -525,13 +526,13 @@ const SupportPage = () => {
               </Select>
             </div>
           </div>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setIsStatusDialogOpen(false)}>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setIsStatusDialogOpen(false)} className="w-full sm:w-auto">
               Annuler
             </Button>
             <Button
               onClick={handleStatusChange}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
+              className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
             >
               <AlertCircle className="h-4 w-4 mr-2" />
               Mettre à jour le statut
@@ -542,9 +543,9 @@ const SupportPage = () => {
 
       {/* Delete Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md mx-4 sm:mx-0">
           <DialogHeader>
-            <DialogTitle className="text-xl text-red-600">
+            <DialogTitle className="text-lg sm:text-xl text-red-600">
               Supprimer le message
             </DialogTitle>
           </DialogHeader>
@@ -553,18 +554,18 @@ const SupportPage = () => {
               Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible.
             </p>
             <div className="mt-4 p-4 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-900">
-              <p className="font-semibold">{selectedMessage?.subject}</p>
-              <p className="text-sm text-muted-foreground mt-1">{selectedMessage?.name} ({selectedMessage?.email})</p>
+              <p className="font-semibold break-words">{selectedMessage?.subject}</p>
+              <p className="text-sm text-muted-foreground mt-1 break-all">{selectedMessage?.name} ({selectedMessage?.email})</p>
             </div>
           </div>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)} className="w-full sm:w-auto">
               Annuler
             </Button>
             <Button
               onClick={handleDeleteMessage}
               variant="destructive"
-              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+              className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Confirmer la suppression
