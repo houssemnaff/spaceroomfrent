@@ -207,9 +207,7 @@ const Utilisateurs = () => {
   const getRoleColor = (role) => {
     switch (role) {
       case "user":
-        return "bg-cours text-white";
-      case "teacher":
-        return "bg-progression text-white";
+        return "bg-cours text-black dark:text-white";
       case "admin":
         return "bg-alerte text-white";
       default:
