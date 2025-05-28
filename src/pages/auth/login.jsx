@@ -57,7 +57,7 @@ export default function Login() {
   const handleGoogleLogin = async (response) => {
     try {
       setIsLoading(true);
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth0/google-Auth`, {
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth0/google-login`, {
         token: response.credential,
       });
       login(data.user, data.token);
