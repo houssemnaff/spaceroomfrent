@@ -182,8 +182,8 @@ export default function Register() {
       const payload = JSON.parse(atob(token.split('.')[1]));
 
       // Send information to your backend
-      const { data } = await axios.post("http://localhost:5000/auth0/google-login", {
-        token,
+const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth0/google-login`, {
+          token,
         userData: {
           name: payload.name,
           email: payload.email,
