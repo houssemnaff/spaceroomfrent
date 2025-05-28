@@ -561,7 +561,6 @@ const Courses = () => {
 
 
       </Tabs>
-      // Ajoutez ce composant de dialogue quelque part dans votre JSX principal
 <Dialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({...deleteDialog, open})}>
   <DialogContent>
     <DialogHeader>
