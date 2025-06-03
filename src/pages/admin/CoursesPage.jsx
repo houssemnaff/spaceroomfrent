@@ -35,6 +35,7 @@ import { toast } from "react-toastify";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import Adminaddcour from "@/components/layouts/addcour/adminaddcour";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
@@ -55,6 +56,10 @@ const Courses = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("courses");
+
+  // États pour la modal d'ajout de cours
+  const [addCourseDialog, setAddCourseDialog] = useState(false);
+  const [previewData, setPreviewData] = useState({});
 
   const [deleteDialog, setDeleteDialog] = useState({
     open: false,
@@ -99,7 +104,6 @@ const Courses = () => {
         console.error("Error fetching courses data:", error);
         toast.error(error.message || "Erreur lors du chargement des cours", {
           containerId: "devoirs-toast"
-
         });
         setError(error.message || "Erreur lors du chargement des cours");
         setLoading(false);
@@ -170,7 +174,6 @@ const Courses = () => {
     }
   };
 
-
   const handleDeleteClick = (courseId, courseName) => {
     setDeleteDialog({
       open: true,
@@ -196,6 +199,47 @@ const Courses = () => {
     } finally {
       setDeleteDialog({ open: false, courseId: null, courseName: "" });
     }
+  };
+
+  // Fonctions pour gérer l'ajout de cours
+  const handleAddCourseSubmit = async (data) => {
+    try {
+      const formData = new FormData();
+      formData.append('title', data.title);
+      formData.append('description', data.description);
+      formData.append('category', data.matiere);
+      formData.append('ownerId', data.ownerId);
+      if (data.imageFile) {
+        formData.append('image', data.imageFile);
+      }
+
+      await adminService.createCourseWithOwner(formData);
+      toast.success("Cours créé avec succès", {
+        containerId: "devoirs-toast"
+      });
+      
+      setAddCourseDialog(false);
+      setPreviewData({});
+      
+      // Recharger les données
+      const coursesData = await adminService.getAllCoursesWithStats();
+      setCourses(coursesData);
+      
+    } catch (error) {
+      console.error("Error creating course:", error);
+      toast.error("Erreur lors de la création du cours", {
+        containerId: "devoirs-toast"
+      });
+    }
+  };
+
+  const handleAddCourseCancel = () => {
+    setAddCourseDialog(false);
+    setPreviewData({});
+  };
+
+  const handlePreviewUpdate = (data) => {
+    setPreviewData(data);
   };
 
   const getCategoryStats = () => {
@@ -314,15 +358,9 @@ const Courses = () => {
             Gérez et suivez les cours de la plateforme.
           </p>
         </div>
-
-
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-
-
-
-
         <TabsContent value="courses" className="space-y-6">
           <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-2">
             <Card className="bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/20 dark:to-gray-950">
@@ -335,7 +373,6 @@ const Courses = () => {
               </CardContent>
             </Card>
 
-
             <Card className="bg-gradient-to-br from-red-50 to-white dark:from-blue-950/20 dark:to-gray-950">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Étudiants inscrits</CardTitle>
@@ -345,9 +382,6 @@ const Courses = () => {
                 <div className="text-2xl font-bold">{stats.enrolledStudents}</div>
               </CardContent>
             </Card>
-
-
-
           </div>
 
           <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -362,9 +396,13 @@ const Courses = () => {
             </div>
 
             <div className="flex gap-2">
-
-
-
+              <Button
+                onClick={() => setAddCourseDialog(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                <PlusCircle className="h-4 w-4 mr-2" />
+                Ajouter un cours
+              </Button>
 
               <Tabs value={viewMode} onValueChange={setViewMode} className="hidden sm:block">
                 <TabsList className="h-10">
@@ -419,7 +457,7 @@ const Courses = () => {
                             size="icon"
                             className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                             onClick={() => handleDeleteClick(course._id, course.title)}
-                            >
+                          >
                             <Trash2 className="h-4 w-4" />
                             <span className="sr-only">Supprimer</span>
                           </Button>
@@ -428,8 +466,6 @@ const Courses = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="flex justify-between mb-3">
-
-
                       </div>
 
                       <div className="space-y-2 mt-4">
@@ -443,7 +479,6 @@ const Courses = () => {
                           <span className="text-muted-foreground">Étudiants</span>
                           <span className="font-medium">{getCourseStudents(course._id)}</span>
                         </div>
-
 
                         <div className="grid grid-cols-2 gap-2 mt-4">
                           <div className="flex items-center gap-1 text-sm">
@@ -463,8 +498,6 @@ const Courses = () => {
                             <span>{getCourseDetails(course._id).meetings} réunions</span>
                           </div>
                         </div>
-
-
                       </div>
                     </CardContent>
                     <CardFooter className="border-t pt-3 text-xs text-muted-foreground">
@@ -536,7 +569,7 @@ const Courses = () => {
                             size="icon"
                             className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                             onClick={() => handleDeleteClick(course._id, course.title)}
-                            >
+                          >
                             <Trash2 className="h-4 w-4" />
                             <span className="sr-only">Supprimer</span>
                           </Button>
@@ -544,7 +577,6 @@ const Courses = () => {
                       </div>
                     );
                   })}
-                  
 
                   {filteredCourses.length === 0 && (
                     <div className="p-8 text-center text-muted-foreground">
@@ -558,37 +590,50 @@ const Courses = () => {
             </Card>
           )}
         </TabsContent>
-
-
       </Tabs>
-<Dialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({...deleteDialog, open})}>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Confirmer la suppression</DialogTitle>
-    </DialogHeader>
-    <div className="py-4">
-      Êtes-vous sûr de vouloir supprimer le cours "{deleteDialog.courseName}" ?
-      Cette action est irréversible.
-    </div>
-    <DialogFooter>
-      <Button variant="outline" onClick={() => setDeleteDialog({...deleteDialog, open: false})}>
-        Annuler
-      </Button>
-      <Button 
-        variant="destructive" 
-        onClick={handleDeleteConfirm}
-        className="ml-2"
-      >
-        Supprimer
-      </Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>
-    </div>
-    
-  );
-  
-};
 
+      {/* Dialog de suppression */}
+      <Dialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({...deleteDialog, open})}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmer la suppression</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            Êtes-vous sûr de vouloir supprimer le cours "{deleteDialog.courseName}" ?
+            Cette action est irréversible.
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialog({...deleteDialog, open: false})}>
+              Annuler
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleDeleteConfirm}
+              className="ml-2"
+            >
+              Supprimer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog d'ajout de cours */}
+      <Dialog open={addCourseDialog} onOpenChange={setAddCourseDialog}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Ajouter un nouveau cours</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <Adminaddcour
+              onSubmit={handleAddCourseSubmit}
+              onCancel={handleAddCourseCancel}
+              onPreviewUpdate={handlePreviewUpdate}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
 
 export default Courses;

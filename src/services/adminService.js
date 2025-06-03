@@ -86,6 +86,14 @@ export const adminService = {
       handleError(error, 'liste des cours');
     }
   },
+   createCourseWithOwner: async (courseData) => {
+    try {
+      const response = await api.post('/courses/with-owner', courseData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
 
   getCourseById: async (courseId) => {
     try {
