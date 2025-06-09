@@ -341,7 +341,6 @@ const Utilisateurs = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-sm">Utilisateur</TableHead>
-                  <TableHead className="text-sm">Rôle</TableHead>
                   <TableHead className="text-sm">Cours inscrits</TableHead>
                   <TableHead className="text-sm">Cours créés</TableHead>
                   <TableHead className="w-[120px] text-right text-sm">Actions</TableHead>
