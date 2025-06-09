@@ -218,9 +218,8 @@ const Utilisateurs = () => {
   const getRoleName = (role) => {
     switch (role) {
       case "user":
-        return "Étudiant";
-      case "teacher":
-        return "Enseignant";
+        return "utilisateur";
+     
       case "admin":
         return "Administrateur";
       default:
@@ -341,6 +340,7 @@ const Utilisateurs = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-sm">Utilisateur</TableHead>
+                  <TableHead className="text-sm">Rôle</TableHead>
                   <TableHead className="text-sm">Cours inscrits</TableHead>
                   <TableHead className="text-sm">Cours créés</TableHead>
                   <TableHead className="w-[120px] text-right text-sm">Actions</TableHead>
