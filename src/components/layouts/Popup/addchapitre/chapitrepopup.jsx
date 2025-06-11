@@ -36,9 +36,9 @@ export default function AddChapterDialog({ open, onClose, onSubmit, courseId }) 
     try {
       const data = { ...chapter };
       const newChapter = await addChapter(courseId, data, token);
-      toast.success("Chapitre ajouté avec succès !", {
-        containerId: "devoirs-toast"}
-);
+    //  toast.success("Chapitre ajouté avec succès !", {
+      //  containerId: "devoirs-toast"}
+//);
       onSubmit(newChapter);
       setChapter({ title: "", number: "", description: "" }); // Reset the form
       onClose();
@@ -84,6 +84,7 @@ export default function AddChapterDialog({ open, onClose, onSubmit, courseId }) 
               onChange={handleChange}
               placeholder="Numéro du chapitre"
               className="col-span-3"
+              min="1"
             />
           </div>
           
