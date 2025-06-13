@@ -28,21 +28,21 @@ const App = () => {
       <nav className="relative z-10 flex items-center justify-between py-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-  <div className="flex items-center gap-2">
-    <img
-      src="https://cdn.builder.io/api/v1/image/assets/d5756f61ad83429b8d94b2f33b9d9ea4/8438fdf3e8149084ed45099b71974cf199e146448a5b977414352412e96ce45b?placeholderIfAbsent=true"
-      alt="Spaceroom Logo"
-      className="h-8 w-8 object-contain"
-    />
-    <span className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent group-hover:from-blue-200 group-hover:to-white transition-all duration-300">
-      Spaceroom
-    </span>
-  </div>
-</Link>
+          <div className="flex items-center gap-2">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/d5756f61ad83429b8d94b2f33b9d9ea4/8438fdf3e8149084ed45099b71974cf199e146448a5b977414352412e96ce45b?placeholderIfAbsent=true"
+              alt="Spaceroom Logo"
+              className="h-8 w-8 object-contain"
+            />
+            <span className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent group-hover:from-blue-200 group-hover:to-white transition-all duration-300">
+              Spaceroom
+            </span>
+          </div>
+        </Link>
 
         {/* Menu Desktop */}
         <div className="hidden md:flex items-center gap-8">
-          <NavLinks />
+          <NavLinks isAuthenticated={isAuthenticated} />
           {isAuthenticated ? (
             <div className="flex items-center gap-4">
               <Link
@@ -104,7 +104,7 @@ const App = () => {
               </div>
 
               <div className="relative z-10 flex flex-col gap-2">
-                <NavLinksMobile />
+                <NavLinksMobile isAuthenticated={isAuthenticated} />
               </div>
 
               <div className="relative z-10 mt-auto pt-6 border-t border-blue-400/20">
@@ -144,18 +144,22 @@ const App = () => {
 };
 
 // Composant pour les liens du menu desktop
-const NavLinks = () => (
+const NavLinks = ({ isAuthenticated }) => (
   <div className="flex items-center gap-8">
     <NavLinkItem to="/" icon={<FaHome />} text="Accueil" />
-    <NavLinkItem to="/contact" icon={<FaEnvelope />} text="Contact" />
+    {isAuthenticated && (
+      <NavLinkItem to="/contact" icon={<FaEnvelope />} text="Contact" />
+    )}
   </div>
 );
 
 // Composant pour les liens du menu mobile
-const NavLinksMobile = () => (
+const NavLinksMobile = ({ isAuthenticated }) => (
   <>
     <MobileNavLink to="/" icon={<FaHome />} text="Accueil" />
-    <MobileNavLink to="/contact" icon={<FaEnvelope />} text="Contact" />
+    {isAuthenticated && (
+      <MobileNavLink to="/contact" icon={<FaEnvelope />} text="Contact" />
+    )}
   </>
 );
 
